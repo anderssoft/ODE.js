@@ -15,7 +15,7 @@ TARGET     = $(TARGETDIR)/libode.js
 EXPORTED_FUNCTIONS = \
 	'_dWorldCreate', '_dWorldDestroy', '_dWorldSetGravity', '_dWorldGetGravity', '_dWorldStep', '_dWorldSetERP', '_dWorldGetERP', '_dWorldSetCFM', '_dWorldGetCFM', '_dWorldSetQuickStepNumIterations', '_dWorldQuickStep', \
 	'_dBodyCreate', '_dBodyDestroy', '_dBodySetPosition', '_dBodySetRotation', '_dBodySetQuaternion', '_dBodySetLinearVel', '_dBodySetAngularVel', '_dWorldSetContactMaxCorrectingVel', '_dWorldGetContactMaxCorrectingVel', '_dWorldSetContactSurfaceLayer', '_dWorldGetContactSurfaceLayer', \
-	'_dBodyGetPosition', '_dBodyGetRotation', '_dBodyGetQuaternion', '_dBodyGetLinearVel', '_dBodyGetAngularVel', '_dBodySetMass', '_dBodyGetMass', '_dBodyGetNumJoints', '_dBodyGetJoint', \
+	'_dBodyGetPosition', '_dBodyGetRotation', '_dBodyGetQuaternion', '_dBodyGetLinearVel', '_dBodyGetAngularVel', '_dBodySetMass', '_dBodyGetMass', '_dBodySetData', '_dBodyGetData', '_dBodyGetNumJoints', '_dBodyGetJoint', \
 	'_dBodyAddForce', '_dBodyAddTorque', '_dBodyAddRelForce', '_dBodyAddRelTorque', '_dBodyAddForceAtPos', '_dBodyAddForceAtRelPos', '_dBodyAddRelForceAtPos', '_dBodyAddRelForceAtRelPos', \
 	'_dBodyGetForce', '_dBodyGetTorque', '_dBodyGetRelPointPos', '_dBodyGetRelPointVel', '_dAreConnected', '_dBodyEnable', '_dBodyDisable', '_dBodyIsEnabled', \
 	'_dMassSetZero', '_dMassSetParameters', '_dMassSetSphere', '_dMassSetSphereTotal', '_dMassSetCapsule', '_dMassSetCapsuleTotal', '_dMassSetCylinder', '_dMassSetCylinderTotal', '_dMassSetBox', '_dMassSetBoxTotal', '_dMassAdjust', '_dMassTranslate', '_dMassRotate', '_dMassAdd', \
@@ -36,7 +36,7 @@ EXPORTED_FUNCTIONS = \
 	'_dCreateGeomTransform', '_dGeomTransformSetGeom', '_dGeomTransformGetGeom', '_dGeomTransformSetCleanup', '_dGeomTransformGetCleanup', '_dCollide', \
 	'_dRSetIdentity', '_dRFromAxisAndAngle', '_dRFromEulerAngles', '_dRFrom2Axes', '_dQSetIdentity', '_dQFromAxisAndAngle', '_dGeomGetClass'
 
-EXTRA_EXPORTED_RUNTIME_METHODS= "ccall", "cwrap", "setValue", "getValue", "addFunction", "removeFunction"
+EXTRA_EXPORTED_RUNTIME_METHODS= 'ccall', 'cwrap', 'setValue', 'getValue', 'addFunction', 'removeFunction'
 
 OBJECTS := \
 	$(OBJDIR)/fastdot.o \
@@ -148,7 +148,7 @@ clean:
 	-@rm -f $(OBJECTS)
 
 $(TARGET): $(OBJECTS) ../src/post.js
-	emcc -O2 --memory-init-file 0 -v -s WASM=1 -s SINGLE_FILE=1 -s TOTAL_MEMORY=33554432 $(OBJECTS) -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=4 -o $@ -s EXPORTED_FUNCTIONS="[$(EXPORTED_FUNCTIONS)]" -s EXTRA_EXPORTED_RUNTIME_METHODS='[$(EXTRA_EXPORTED_RUNTIME_METHODS)]' --pre-js ../src/pre.js --post-js ../src/post.js
+	emcc -O2 --memory-init-file 0 -v -s WASM=1 -s SINGLE_FILE=1 -s TOTAL_MEMORY=33554432 $(OBJECTS) -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=4 -o $@ -s EXPORTED_FUNCTIONS="[$(EXPORTED_FUNCTIONS)]" -s EXTRA_EXPORTED_RUNTIME_METHODS="[$(EXTRA_EXPORTED_RUNTIME_METHODS)]" --pre-js ../src/pre.js --post-js ../src/post.js
 
 ../src/post.js: $(JS_SOURCES)
 	@../node_modules/.bin/grunt --gruntfile ../Gruntfile.js post
